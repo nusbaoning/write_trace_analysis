@@ -23,7 +23,7 @@ DIRTY_THROT = 30
 FLUSH_MODE = 0
 TIME_WINDOW = 60
 current = 0
-f = open("../data/result2.log", "a")
+f = open("../data/result.log", "a")
 '''
 main overflow of the program
 '''
@@ -40,6 +40,7 @@ def load_file(filename):
         
         # with codecs.open(filename, 'r', encoding='utf-8', errors='ignore') as fin:
         #     for line in fin:
+
         s = time.time()
         fin = codecs.open(filename, 'r', encoding='utf-8', errors='ignore')          
         lines = fin.readlines()
@@ -49,6 +50,7 @@ def load_file(filename):
         lineNum = len(lines)
         for line in lines:
             i=i+1
+            # print(i, readreq, writereq)
 #            if line is null
             if len(line)<=10:
                 continue
@@ -83,6 +85,7 @@ def load_file(filename):
                 # isize = int(items[j])
                 # j+=1
                 r = 0
+                j += 1
             else:
                 r = 1
             pos = int(items[j])
@@ -122,9 +125,9 @@ def load_file(filename):
             if (FLUSH_MODE==1) and (current - timer >= TIME_WINDOW):
                 flush_page()
                 timer = current
-            if i%100==0:
+            if i%10000==0:
                 e = time.time()
-                print(i, int(100*i/lineNum), "%", indexNum, (writereq-tempReq), "consumed", (e-s), "s", file=f)
+                print(i, int(100*i/lineNum), "%", indexNum, (writereq-tempReq), "consumed", (e-s), "s")
                 tempReq = writereq
                 s = e
     except Exception as e:
@@ -208,7 +211,8 @@ def clear_state():
     state = [0] * MAX_OVERWRITE_NUM
 
 s = time.time()
-workload_list = ["../data/tpcc.log"]
+workload_list = ["../data/tpcc_test1.log"]
+
 dt_list = [10, 60, 120]
 
 
